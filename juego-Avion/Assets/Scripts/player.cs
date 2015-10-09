@@ -2,6 +2,11 @@
 using System.Collections;
 
 public class player : MonoBehaviour {
+	public GameObject disparo;
+	public Transform ContenedorDisparo;
+	public float fireRate;
+	public float nextFire;
+
 	public float xMin, xMax, zMin, zMax; // valores maximos y minimos para desplazar a la nave
 	private Rigidbody rb;
 
@@ -10,7 +15,16 @@ public class player : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
 	}
-	
+
+	void Update(){
+		if(Input.GetButton("Fire1") && Time.time > nextFire){
+			nextFire = Time.time + fireRate;
+			Instantiate(disparo, ContenedorDisparo.position, ContenedorDisparo.rotation);
+
+
+		}
+
+	}
 	// Update is called once per frame
 	void FixedUpdate () {    // Fixed para manejar mejor la fisica
 	
