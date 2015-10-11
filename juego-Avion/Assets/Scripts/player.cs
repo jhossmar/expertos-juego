@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class player : MonoBehaviour {
 	public GameObject disparo;
@@ -12,6 +13,8 @@ public class player : MonoBehaviour {
     public float spawnWait;
 	public float startWait;
 	public float waveWait;
+	public GameObject explocion;
+	public Button btnRestart;
 	
 	public float xMin, xMax, zMin, zMax; // valores maximos y minimos para desplazar a la nave
 	private Rigidbody rb;
@@ -21,6 +24,7 @@ public class player : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
 		StartCoroutine (crearAsteroide());
+		btnRestart.gameObject.SetActive (false);
 	}
 
 	void Update(){
@@ -28,7 +32,7 @@ public class player : MonoBehaviour {
 			nextFire = Time.time + fireRate;
 			Instantiate(disparo, ContenedorDisparo.position, ContenedorDisparo.rotation);
 
-
+            GetComponent<AudioSource>().Play();
 		}
 
 	}
@@ -67,9 +71,20 @@ public class player : MonoBehaviour {
 			yield return new WaitForSeconds(waveWait);
 		
 		}
+    }
 
+    void OnTriggerEnter(Collider otrer){
+    if(otrer.gameObject.tag == "asteroide"){
+         Instantiate (explocion, transform.position, transform.rotation);
+         this.gameObject.SetActive(false);
+         btnRestart.gameObject.SetActive (true);
+	   }
 
+    }
 
+     public void reloadGame(){
+
+		Application.LoadLevel(Application.loadedLevelName);
 	}
 
 
