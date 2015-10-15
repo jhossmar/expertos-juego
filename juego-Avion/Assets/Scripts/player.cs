@@ -15,6 +15,13 @@ public class player : MonoBehaviour {
 	public float waveWait;
 	public GameObject explocion;
 	public Button btnRestart;
+	public Text Textnivel;
+	public GameObject enemigo;
+	private bool visivleEnemigo;
+
+	public GameObject score;
+	private int nivel;
+	
 	
 	public float xMin, xMax, zMin, zMax; // valores maximos y minimos para desplazar a la nave
 	private Rigidbody rb;
@@ -22,9 +29,17 @@ public class player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		visivleEnemigo = false;
+	
 		rb = GetComponent<Rigidbody> ();
+	
 		StartCoroutine (crearAsteroide());
+	   
 		btnRestart.gameObject.SetActive (false);
+
+		nivel = 1;
+		 
+		 
 	}
 
 	void Update(){
@@ -33,6 +48,14 @@ public class player : MonoBehaviour {
 			Instantiate(disparo, ContenedorDisparo.position, ContenedorDisparo.rotation);
 
             GetComponent<AudioSource>().Play();
+		}
+
+		if (nivel==6 && visivleEnemigo!=true){
+
+			Vector3 spawnPosition = new Vector3(0f, 7f, 6f);
+			Quaternion spawnRotation = Quaternion.identity;
+			Instantiate(enemigo,spawnPosition,spawnRotation);
+			visivleEnemigo=true;
 		}
 
 	}
@@ -60,7 +83,8 @@ public class player : MonoBehaviour {
 	**/
 	IEnumerator crearAsteroide(){
 		yield return new WaitForSeconds (startWait);
-		while (true) {
+		 
+		while (nivel<=5) {
 			for(int i = 0; i<cantidadAsteroides; i++){
 				 float auxH = (float)Random.Range(-spawnValues,spawnValues);
 				Vector3 spawnPosition = new Vector3(auxH, 7f, 6f);
@@ -72,6 +96,7 @@ public class player : MonoBehaviour {
 		
 		}
     }
+	
 
     void OnTriggerEnter(Collider otrer){
     if(otrer.gameObject.tag == "asteroide"){
@@ -85,6 +110,12 @@ public class player : MonoBehaviour {
      public void reloadGame(){
 
 		Application.LoadLevel(Application.loadedLevelName);
+	}
+
+	public void  cambiarNivel(int nivel){
+		this.nivel = nivel;
+		Debug.Log ("nivel del player:"+nivel);
+		Textnivel.text = "NIVEL: " + nivel;
 	}
 
 

@@ -17,4 +17,9 @@ public class rotacion : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	public void aumentarVelosidad(int velocidad){
+		GetComponent<Rigidbody> ().velocity = transform.forward * - velocidad*2;
+		Debug.Log( "Se aumento la velocidad a:"+ velocidad*2);
+	}
 }

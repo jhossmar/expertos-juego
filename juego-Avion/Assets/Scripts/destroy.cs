@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class destroy : MonoBehaviour {
     public GameObject explocion;
+	public GameObject puntuacion;
+  
 
 	// Use this for initialization
 	void Start () {
@@ -16,20 +18,23 @@ public class destroy : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider otrer){
-		 if(otrer.name == "hit"){
-            return;
-          
-
-		 }
-	   
+		
+	   if(otrer.gameObject.tag == "hit"){
+      
+	     Destroy(gameObject);
+	   }
           
        if(otrer.gameObject.tag == "asteroide"){
         Instantiate (explocion, transform.position, transform.rotation);
-	     
+	    Destroy(otrer.gameObject);
+
+			puntuacion = GameObject.Find("score");
+		puntuacion.SendMessage("incrementarScore");
+		
 	   }
 	   if(otrer.gameObject.tag != "Player"){
 	      Destroy(gameObject);
-          Destroy(otrer.gameObject);
+        //  Destroy(otrer.gameObject);
         }
 
 	}
